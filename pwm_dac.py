@@ -1,21 +1,18 @@
 import RPi.GPIO as GPIO
 
-class R2R_DAC:
-    def __init__(self, gpio_bits, dynamic_range, verbose = False):
-        self.gpio_bits = gpio_bits
+class R2R_PWM:
+    def __init__(self, gpio_pin, pwm_frequency, dynamic_range, verbose = False):
+        self.gpio_pin = gpio_pin
         self.dynamic_range = dynamic_range
         self.verbose = verbose
         
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.gpio_bits, GPIO.OUT, initial = 0)
+        GPIO.setup(self.gpio_pin, GPIO.OUT, initial = 0)
     
     def deinit(self):
-        GPIO.output(self.gpio_bits, 0)
+        GPIO.output(self.gpio_pin, 0)
         GPIO.cleanup()
-
-    def set_number(self, number):
-        GPIO.output(self.gpio_bits, [int(element) for element in bin(number)[2:].zfill(8)])
-
+    
     def set_voltage(self, voltage):
         if(not(0.0 <= voltage <= self.dynamic_range)):
             print(f"Voltage is out of range (0.0 ... {self.dynamic_range:.2f} V)")
@@ -23,9 +20,10 @@ class R2R_DAC:
             dac.set_number(0)
         else: dac.set_number(int(voltage / self.dynamic_range * 255))
 
+    
 if __name__ == "__main__":
     try:
-        dac = R2R_DAC([16, 20, 21, 25, 26, 17, 27, 22], 3.183, True)
+        dac = R2R_PWM([16, 20, 21, 25, 26, 17, 27, 22], 3.183, True)
                
         while True:
             try:

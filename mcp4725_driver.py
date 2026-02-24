@@ -32,8 +32,8 @@ class MCP4725:
         if(not(0.0 <= voltage <= self.dynamic_range)):
             print(f"Voltage is out of range (0.0 ... {self.dynamic_range:.2f} V)")
             print("Set zero.")
-            mcp.set_number(0)
-        else: mcp.set_number(int(voltage / self.dynamic_range * 4096))
+            self.set_number(0)
+        else: self.set_number(int(voltage / self.dynamic_range * 4096))
 
 if __name__ == "__main__":
     try:

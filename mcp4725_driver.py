@@ -32,6 +32,21 @@ class MCP4725:
         if(not(0.0 <= voltage <= self.dynamic_range)):
             print(f"Voltage is out of range (0.0 ... {self.dynamic_range:.2f} V)")
             print("Set zero.")
-            dac.set_number(0)
-        else: dac.set_number(int(voltage / self.dynamic_range * 255))
+            mcp.set_number(0)
+        else: mcp.set_number(int(voltage / self.dynamic_range * 4096))
 
+if __name__ == "__main__":
+    try:
+        #mcp = R2R_mcp([16, 20, 21, 25, 26, 17, 27, 22], 3.183, True)
+        mcp = MCP4725(5.1)
+               
+        while True:
+            try:
+                voltage = float(input("Input voltage (V): "))
+                mcp.set_voltage(voltage)
+        
+            except ValueError:
+                print("This is NAN, try again\n")
+        
+    finally:
+        mcp.deinit()

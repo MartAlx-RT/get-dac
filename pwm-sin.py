@@ -11,8 +11,7 @@ t = 0
 start_t = time.time()
 
 try:
-    dac = pwm.R2R_DAC([16, 20, 21, 25, 26, 17, 27, 22], 3.183, True)
-    
+    dac = pwm.R2R_PWM(12, 500, 3.29, True)
     while True:
         dac.set_voltage(sg.get_sin_wave_amplitude(signal_frequency, t)*amplitude)
         t = time.time() - start_t

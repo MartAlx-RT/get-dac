@@ -5,25 +5,32 @@ class R2R_PWM:
         self.gpio_pin = gpio_pin
         self.dynamic_range = dynamic_range
         self.verbose = verbose
+        self.pwm_frequency = pwm_frequency
         
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.gpio_pin, GPIO.OUT, initial = 0)
+        self.pwm = GPIO.PWM(self.gpio_pin, self.pwm_frequency)
+        self.pwm.start(0)
     
     def deinit(self):
         GPIO.output(self.gpio_pin, 0)
         GPIO.cleanup()
     
+    def set_number(self, number):
+        coef = number / self.dynamic_range * 100.0
+        self.pwm.ChangeDutyCycle(coef)
+        
     def set_voltage(self, voltage):
         if(not(0.0 <= voltage <= self.dynamic_range)):
             print(f"Voltage is out of range (0.0 ... {self.dynamic_range:.2f} V)")
             print("Set zero.")
-            dac.set_number(0)
-        else: dac.set_number(int(voltage / self.dynamic_range * 255))
+            self.set_number(0)
+        else: self.set_number(voltage)
 
     
 if __name__ == "__main__":
     try:
-        dac = R2R_PWM([16, 20, 21, 25, 26, 17, 27, 22], 3.183, True)
+        dac = R2R_PWM(12, 500, 3.29, True)
                
         while True:
             try:

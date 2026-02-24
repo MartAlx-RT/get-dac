@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 #import time
 GPIO.setmode(GPIO.BCM)
-
+#comment
 dynamic_range = 3.3
 pinout = [16, 20, 21, 25, 26, 17, 27, 22]
 GPIO.setup(pinout, GPIO.OUT)
